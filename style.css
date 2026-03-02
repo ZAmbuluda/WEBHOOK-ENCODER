@@ -32,7 +32,7 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center; /* vrai centrage vertical */
+  align-items: flex-start;
   padding: 2rem;
 }
 
@@ -43,7 +43,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px; /* espace propre entre les blocs */
+  gap: 40px;
 }
 
 /* Background glow */
@@ -95,17 +95,26 @@ form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+  text-align: center;
 }
 
-label {
+.webhook-input-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.webhook-input-container label {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-secondary);
 }
 
-input[type="text"],
-textarea {
-  width: 100%;
+.webhook-input-container input[type="text"] {
+  width: 80%;
+  max-width: 400px;
   padding: 1rem;
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -131,6 +140,7 @@ button {
   cursor: pointer;
   transition: var(--transition);
   text-transform: uppercase;
+  margin: 0 auto;
 }
 
 button:hover {
@@ -141,7 +151,7 @@ button:hover {
 /* FOOTER */
 .footer {
   font-size: 0.9rem;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255, 255, 255, 0.6);
   text-align: center;
 }
 
