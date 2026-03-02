@@ -30,8 +30,12 @@ body {
   background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
   color: var(--text-primary);
   min-height: 100vh;
-  padding: 120px 2rem 2rem 2rem; /* 👈 ça descend tout */
+  display: flex;
+  justify-content: center;
+  align-items: center; /* vrai centrage vertical */
+  padding: 2rem;
 }
+
 /* WRAPPER PREND TOUTE LA HAUTEUR */
 .page-wrapper {
   width: 100%;
