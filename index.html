@@ -22,10 +22,13 @@
             <h2 class="main-title">Webhook Encoder</h2>
 
             <form id="webhookForm">
-                <label for="webhook">Enter your webhook:</label>
-                <input type="text" id="webhook" required>
-                <button type="submit">Gen Your Script</button>
-            </form>
+    <div class="webhook-input-container">
+        <label for="webhook">Enter your webhook:</label>
+        <input type="text" id="webhook" required>
+    </div>
+    <button type="submit">Gen Your Script</button>
+</form>
+
 
             <h2 id="resultTitle" style="display:none;">Script Lua generated :</h2>
             <textarea id="luaScript" rows="12" readonly style="display:none;"></textarea>
