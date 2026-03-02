@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Webhook Encoder</title>
@@ -7,14 +7,16 @@
 </head>
 <body>
 <div class="container">
-    <h1>Webhook Encoder </h1>
+    <h1>Webhook Encoder</h1>
     <form id="webhookForm">
-        <label for="webhook">Enter your webhook :</label>
-        <input type="text" id="webhook" name="webhook" required>
-        <button type="submit">Gen your script</button>
+        <label for="webhook">Enter your webhook:</label>
+        <input type="text" id="webhook" required>
+        <button type="submit">Gen Your Script</button>
     </form>
+
     <h2 id="resultTitle" style="display:none;">Script Lua generated :</h2>
     <textarea id="luaScript" rows="12" readonly style="display:none;"></textarea>
+    <button id="copyBtn" style="display:none;">Copy Script</button>
 </div>
 
 <script src="script.js"></script>
