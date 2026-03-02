@@ -1,1 +1,141 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;600&display=swap');
 
+:root {
+  --bg-primary: hsl(220, 90%, 10%);
+  --bg-secondary: hsl(220, 85%, 15%);
+  --accent-light: hsl(320, 50%, 65%);
+  --text-primary: hsl(0, 0%, 95%);
+  --text-secondary: hsl(0, 0%, 70%);
+  --border: hsl(220, 50%, 30%);
+  --shadow: 0 0 30px rgba(100, 50, 255, 0.3);
+  --glow: 0 0 20px rgba(180, 100, 255, 0.5);
+  --radius: 12px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  line-height: 1.6;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><defs><radialGradient id="particles"><stop offset="0%" stop-color="%23ff00ff20"/><stop offset="100%" stop-color="%2300ffff00"/></radialGradient><circle cx="40" cy="40" r="1" fill="url(%23particles)"/><circle cx="120" cy="80" r="0.5" fill="url(%23particles)"/><circle cx="200" cy="150" r="1.2" fill="url(%23particles)"/><circle cx="300" cy="60" r="0.8" fill="url(%23particles)"/><circle cx="400" cy="200" r="1.5" fill="url(%23particles)"/><circle cx="500" cy="120" r="0.7" fill="url(%23particles)"/><circle cx="600" cy="180" r="1" fill="url(%23particles)"/><circle cx="700" cy="90" r="1.3" fill="url(%23particles)"/><circle cx="800" cy="160" r="0.9" fill="url(%23particles)"/><circle cx="900" cy="50" r="1.1" fill="url(%23particles)"/></svg>');
+  z-index: -1;
+  opacity: 0.3;
+}
+
+.container {
+  max-width: 800px;
+  width: 100%;
+  background: rgba(20, 20, 50, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 2.5rem;
+  text-align: center;
+}
+
+h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: var(--glow);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+input[type="text"] {
+  padding: 0.8rem 1.2rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--glow);
+}
+
+button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(180, 100, 255, 0.4);
+}
+
+textarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text-primary);
+  font-family: 'Consolas', monospace;
+  resize: none;
+  transition: var(--transition);
+  margin-top: 1rem;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--glow);
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1.5rem;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+}
