@@ -1,1 +1,73 @@
-# WEBHOOK-ENCODER
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Obfuscateur de Webhook</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Obfuscateur de Webhook</h1>
+    <form method="post">
+        <label for="webhook">Entrez votre webhook :</label><br>
+        <input type="text" id="webhook" name="webhook" required><br>
+        <button type="submit">Générer le script</button>
+    </form>
+    {% if script %}
+    <h2>Script Lua généré :</h2>
+    <textarea rows="10" cols="80" readonly>{{ script }}</textarea>
+    {% endif %}
+</body>
+</html>
+"""
+
+# Génère le script Lua obfusqué
+def generate_lua_script(obfuscated_webhook):
+    # Table de substitution inverse pour Lua
+    reverse_sub = {v: k for k, v in SUBSTITUTION.items()}
+    reverse_sub_str = ', '.join([f'["{v}"] = "{k}"' for k, v in reverse_sub.items()])
+
+    lua_script = f"""
+-- Script généré automatiquement
+getgenv().obfuscatedWebhook = "{obfuscated_webhook}"
+
+-- Table de substitution inverse
+local REVERSE_SUBSTITUTION = {{{reverse_sub_str}}}
+
+-- Fonction pour déobfusquer une chaîne
+local function deobfuscate(text)
+    local deobfuscated = {{}}
+    for i = 1, #text do
+        local char = text:sub(i, i)
+        deobfuscated[i] = REVERSE_SUBSTITUTION[char] or char
+    end
+    return table.concat(deobfuscated)
+end
+
+-- Déobfuscation du webhook
+local webhook = deobfuscate(getgenv().obfuscatedWebhook)
+
+-- Exemple d'utilisation du webhook
+local HttpService = game:GetService("HttpService")
+local data = {{ content = "Message envoyé via webhook obfusqué !" }}
+local success, response = pcall(function()
+    return HttpService:PostAsync(webhook, HttpService:JSONEncode(data))
+end)
+if success then
+    print("Message envoyé avec succès !")
+else
+    warn("Erreur : " .. response)
+end
+"""
+    return lua_script
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    if request.method == 'POST':
+        webhook = request.form.get('webhook')
+        obfuscated_webhook = obfuscate(webhook)
+        script = generate_lua_script(obfuscated_webhook)
+        return render_template_string(HTML_TEMPLATE, script=script)
+    return render_template_string(HTML_TEMPLATE, script=None)
+
+if __name__ == '__main__':
+    app.run(debug=True)
